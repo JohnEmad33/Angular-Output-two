@@ -1,0 +1,65 @@
+<div>
+  <app-filter-list
+    (filterRadioButtonSelectionChanged)="onFilterRadioButtonChanged($event)"
+  >
+  </app-filter-list>
+  <app-search (searchTextChanged)="onSearchTextEntered($event)"></app-search>
+  <app-filter
+    [total]="getTotalItems()"
+    [free]="getTotalFreeItems()"
+    [premium]="getTotalPremiumItems()"
+    (filterRadioButtonSelectionChanged)="
+      onFilterRadioButtonCountChanged($event)
+    "
+  ></app-filter>
+</div>
+
+<ng-container *ngFor="let item of items">
+  <ng-container
+    *ngIf="itemRadioButton === 'Both' || itemRadioButton === item.kind"
+  >
+    <ng-container
+      *ngIf="
+        itemCountRadioButton === 'All' || itemCountRadioButton === item.type
+      "
+    >
+      <div
+        class="course-container"
+        *ngIf="
+          searchText === '' || item.name.toLowerCase().includes(searchText)
+        "
+      >
+        <div class="course-card">
+          <div>
+            <img [src]="item.image" style="width: 220px; height: 140px" />
+          </div>
+          <div class="course-name">
+            <span
+              ><b>{{ item.name }}</b></span
+            >
+          </div>
+          <div class="course-description">
+            <p>{{ item.description.slice(0, 80) }}...</p>
+          </div>
+          <div class="details">
+            <div
+              class="course-type"
+              [ngStyle]="{ color: item.type === 'Free' ? 'Green' : 'Red' }"
+            >
+              {{ item.type }}
+            </div>
+            <div class="course-price"><b>Price:</b> ${{ item.price }}</div>
+          </div>
+          <div class="course-buttons" [appButtonBg]="item.kind === 'course'">
+            <button class="btn btn-buy" (click)="boughtItem = item">
+              <b>Buy Now</b>
+            </button>
+            <button class="btn btn-show" (click)="detailsItem = item">
+              <b>Show Deatils</b>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>
